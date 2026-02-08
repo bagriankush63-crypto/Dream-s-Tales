@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream's Tales - Create Story</title>
+  <style>
+     
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #38bdf8;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #38bdf8;
+            text-shadow: 0 0 10px #38bdf8;
+        }
+
+        main {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            font-size: 16px;
+        }
+
+        label {
+            font-weight: bold;
+            color: #facc15;
+        }
+
+        p {
+            margin-top: 10px;
+            margin-bottom: 8px;
+            font-size: 17px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #38bdf8;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0ea5e9;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #38bdf8;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+
+        /* YES NO RADIO BUTTON FIX */
+
+        .radio-group {
+            margin: 10px 0;
+            font-size: 18px;
+            text-align: left;
+            /* 👈 NOW LEFT SIDE */
+        }
+
+        .radio-group input[type="radio"] {
+            display: none;
+        }
+
+        .radio-group label {
+            padding: 8px 18px;
+            border: 2px solid #38bdf8;
+            border-radius: 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .radio-group input[type="radio"]:checked+label {
+            background: #38bdf8;
+            color: black;
+            box-shadow: 0 0 10px #38bdf8;
+        }
+    
+  </style>
+</head>
+<body>
+
+  <header>
+    <img src="Logo.jpeg" alt="Dream's Tales Logo" class="logo">
+    <h1>Dream's Tales</h1>
+    <hr>
+  </header>
+
+  <main>
+    <form id="create">
+      <div>
+        <label for="name">Name</label>
+        <input id="name" type="text" placeholder="Enter Your Name" required>
+      </div>
+
+      <div>
+        <label for="course">Course</label>
+        <input id="course" type="text" placeholder="Enter Your Course Name" required>
+      </div>
+
+      <div>
+        <label for="gender">Gender</label>
+        <select id="gender" required>
+          <option value="" disabled selected>Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="ph">Phone no.</label>
+        <input id="ph" type="tel" placeholder="Enter Your Phone Number" required>
+      </div>
+
+      <div class="radio-group">
+        <p>You want to mention your name in your story?</p>
+        <input id="yes" type="radio" name="mention" value="yes">
+        <label for="yes">Yes</label>
+        <input id="no" type="radio" name="mention" value="no">
+        <label for="no">No</label>
+      </div>
+
+      <div>
+        <label for="storyn">Story Name</label>
+        <input id="storyn" type="text" placeholder="Enter Your Story Name">
+      </div>
+
+      <div>
+        <label for="story">Story</label>
+        <textarea id="story" placeholder="Enter your story!" rows="10" required></textarea>
+      </div>
+
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+    <div id="data-output"></div>
+  </main>
+
+  <footer>
+    <hr>
+    <p>© 2026 Dream's Tales | Created by Ankush Bagri</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRecH7dipoPM9Q6RHWHG4wiIJxMjusa3M",
+      authDomain: "create-first-d422f.firebaseapp.com",
+      databaseURL: "https://create-first-d422f-default-rtdb.firebaseio.com",
+      projectId: "create-first-d422f",
+      storageBucket: "create-first-d422f.appspot.com", // ✅ fixed
+      messagingSenderId: "920159968655",
+      appId: "1:920159968655:web:effd872107bbcc93e0fffa"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Reference to database
+    var storiesDB = firebase.database().ref("stories");
+
+    // Form submit
+    document.getElementById("create").addEventListener("submit", submitForm);
+
+    function submitForm(e) {
+      e.preventDefault();
+
+      var name = document.getElementById("name").value;
+      var course = document.getElementById("course").value;
+      var gender = document.getElementById("gender").value;
+      var phone = document.getElementById("ph").value;
+      var mention = document.querySelector('input[name="mention"]:checked')?.value || "no";
+      var storyn = document.getElementById("storyn").value;
+      var story = document.getElementById("story").value;
+
+      // Save to Firebase
+      var newEntry = storiesDB.push();
+      newEntry.set({
+        name: name,
+        course: course,
+        gender: gender,
+        phone: phone,
+        mention: mention,
+        storyName: storyn,
+        story: story
+      });
+
+      alert("Story submitted successfully!");
+      document.getElementById("create").reset();
+    }
+
+    // Read & display data
+    storiesDB.on("child_added", function(snapshot) {
+      var data = snapshot.val();
+      var container = document.getElementById("data-output");
+
+      var entry = `
+        <p>
+          <strong>Name:</strong> ${data.name} <br>
+          <strong>Course:</strong> ${data.course} <br>
+          <strong>Gender:</strong> ${data.gender} <br>
+          <strong>Phone:</strong> ${data.phone} <br>
+          <strong>Mention:</strong> ${data.mention} <br>
+          <strong>Story Name:</strong> ${data.storyName} <br>
+          <strong>Story:</strong> ${data.story}
+        </p>
+        <hr>
+      `;
+      container.innerHTML += entry;
+    });
+  </script>
+</body>
+</html>

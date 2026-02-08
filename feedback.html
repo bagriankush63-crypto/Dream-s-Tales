@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream's Tales - Feedback</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: white;
+    padding: 20px;
+}
+
+/* HEADER */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    box-shadow: 0 0 20px #38bdf8;
+}
+
+h1 {
+    font-size: 2.8rem;
+    color: #38bdf8;
+    text-shadow: 0 0 10px #38bdf8;
+}
+
+/* MAIN FORM BOX */
+main {
+    max-width: 600px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+/* LABEL */
+label {
+    font-size: 18px;
+    font-weight: bold;
+    color: #facc15;
+}
+
+/* TEXTAREA */
+textarea {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    resize: none;
+    background: #020617;
+    color: white;
+    box-shadow: inset 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0ea5e9;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px #38bdf8;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="Logo.jpeg" alt="Dream's Tales Logo" class="logo">
+    <h1>Dream's Tales</h1>
+    <hr>
+  </header>
+
+  <main>
+    <form id="feedbackForm">
+      <div>
+        <label for="feedback">Feedback</label>
+        <textarea id="feedback" name="feedback" placeholder="Enter your Feedback!" rows="10" required></textarea>
+      </div>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+
+    <div id="data-output"></div>
+  </main>
+
+  <footer>
+    <hr>
+    <p>© 2026 Dream's Tales | Created by Ankush Bagri</p>
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCRecH7dipoPM9Q6RHWHG4wiIJxMjusa3M",
+      authDomain: "create-first-d422f.firebaseapp.com",
+      databaseURL: "https://create-first-d422f-default-rtdb.firebaseio.com",
+      projectId: "create-first-d422f",
+      storageBucket: "create-first-d422f.appspot.com", // ✅ fixed
+      messagingSenderId: "920159968655",
+      appId: "1:920159968655:web:effd872107bbcc93e0fffa"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Reference to database
+    var feedbackDB = firebase.database().ref("feedbacks");
+
+    // Form submit
+    document.getElementById("feedbackForm").addEventListener("submit", submitForm);
+
+    function submitForm(e) {
+      e.preventDefault();
+
+      var feedback = document.getElementById("feedback").value;
+
+      // Save to Firebase
+      var newEntry = feedbackDB.push();
+      newEntry.set({
+        feedback: feedback,
+        timestamp: new Date().toLocaleString()
+      });
+
+      alert("Feedback submitted successfully!");
+      document.getElementById("feedbackForm").reset();
+    }
+
+    // Read & display feedbacks
+    feedbackDB.on("child_added", function(snapshot) {
+      var data = snapshot.val();
+      var container = document.getElementById("data-output");
+
+      var entry = `
+        <p>
+          <strong>Feedback:</strong> ${data.feedback} <br>
+          <small>Submitted at: ${data.timestamp}</small>
+        </p>
+        <hr>
+      `;
+      container.innerHTML += entry;
+    });
+  </script>
+</body>
+</html>
